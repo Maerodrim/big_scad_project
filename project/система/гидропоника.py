@@ -1,8 +1,8 @@
 from solid2 import *
-from настройки.параметры import *
-from базовые_формы.примитивы import r_box
-from компоненты.люк import hatch_outer, hatch_inner
-from стили.раскладка import layout_outer, layout_inner
+from project.настройки.параметры import *
+from project.базовые_формы.примитивы import r_box
+from project.компоненты.люк import hatch_outer, hatch_inner
+from project.стили.раскладка import layout_outer, layout_inner
 
 def hydro_system(type_id, style=1):
     H_val = H_bot if type_id == 1 else H_top

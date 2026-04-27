@@ -1,6 +1,6 @@
 import math
 from solid2 import *
-from настройки.параметры import *
+from project.настройки.параметры import *
 
 def balcony_outer(w, d, h, r_xy, r_z):
     return hull()(

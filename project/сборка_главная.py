@@ -2,12 +2,12 @@ import os
 from datetime import datetime
 from solid2 import *
 
-from настройки.параметры import *
-from базовые_формы.примитивы import r_box
-from компоненты.люк import hatch_lid_and_float
-from стили.раскладка import layout_lids
-from каркас.экзоскелет import exoskeleton_wrap
-from система.гидропоника import hydro_system
+from project.настройки.параметры import *
+from project.базовые_формы.примитивы import r_box
+from project.компоненты.люк import hatch_lid_and_float
+from project.стили.раскладка import layout_lids
+from project.каркас.экзоскелет import exoskeleton_wrap
+from project.система.гидропоника import hydro_system
 
 
 def build_farm():

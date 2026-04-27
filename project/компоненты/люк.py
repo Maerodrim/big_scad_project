@@ -1,6 +1,9 @@
 from solid2 import *
-from настройки.параметры import *
-from базовые_формы.примитивы import r_box
+from project.настройки.параметры import *
+from project.базовые_формы.примитивы import r_box
+
+from project.настройки.параметры import *
+
 
 def hatch_outer():
     return hull()(

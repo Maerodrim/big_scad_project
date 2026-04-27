@@ -1,6 +1,6 @@
 import math
 from solid2 import *
-from настройки.параметры import *
+from project.настройки.параметры import *
 
 def skadis_mesh_cell():
     outer = hull()(

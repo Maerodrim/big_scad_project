@@ -1,6 +1,6 @@
 from solid2 import *
-from настройки.параметры import *
-from компоненты.балконы import balcony_outer, balcony_inner, u_shape_lid
+from project.настройки.параметры import *
+from project.компоненты.балконы import balcony_outer, balcony_inner, u_shape_lid
 
 def place_outer(x, y, rot, length):
     return translate([x, y, base])(rotate([0, 0, rot])(balcony_outer(length, 45, H_balc - base, R_out, 15)))

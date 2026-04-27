@@ -1,8 +1,8 @@
 from solid2 import *
-from настройки.параметры import *
-from базовые_формы.примитивы import r_box
-from каркас.сетка import skadis_mesh_panel
-from стили.раскладка import layout_exo_cutouts
+from project.настройки.параметры import *
+from project.базовые_формы.примитивы import r_box
+from project.каркас.сетка import skadis_mesh_panel
+from project.стили.раскладка import layout_exo_cutouts
 
 def exoskeleton_wrap(type_id, style=1):
     H_exo = H_bot if type_id == 1 else H_top
