@@ -4,6 +4,7 @@ from project.базовые_формы.примитивы import r_box
 from project.компоненты.люк import hatch_outer, hatch_inner
 from project.стили.раскладка import layout_outer, layout_inner
 
+
 def hydro_system(type_id, style=1):
     H_val = H_bot if type_id == 1 else H_top
     h_t_base = H_val - 25
@@ -41,7 +42,8 @@ def hydro_system(type_id, style=1):
         )
 
     if type_id > 1:
-        drain_supports = [rotate([0, 0, a])(translate([drain_d / 2 + 1, 0, drain_h])(cylinder(d=3, h=10))) for a in [0, 120, 240]]
+        drain_supports = [rotate([0, 0, a])(translate([drain_d / 2 + 1, 0, drain_h])(cylinder(d=3, h=10))) for a in
+                          [0, 120, 240]]
         pipes += translate([L / 2, W / 2, base])(
             cylinder(d=drain_d + 4, h=drain_h) +
             translate([0, 0, drain_h + 10])(cylinder(h=8, d1=drain_d + 20, d2=drain_d + 5)) +
@@ -57,6 +59,11 @@ def hydro_system(type_id, style=1):
     if type_id == 1:
         cuts += translate([p_x, p_y, H_val / 2 - 0.1])(cylinder(d=p_id, h=H_val / 2 + 20))
         cuts += translate([-1, p_y + p_od / 2 + 2, H_val - 15])(cube([wall + 2, 10, 16]))
+
+        # Пробиваем отверстия к трубке уровня воды в основном баке
+        cuts += translate([30, -5, 20])(rotate([-90, 0, 0])(cylinder(d=6, h=20)))
+        cuts += translate([30, -5, H_bot - 20])(rotate([-90, 0, 0])(cylinder(d=6, h=20)))
+
     elif type_id == 2:
         cuts += translate([p_x, p_y, -lip_h - 1])(cylinder(d=p_id, h=H_val + lip_h + 20))
     elif type_id == 3:

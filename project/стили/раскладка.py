@@ -12,39 +12,51 @@ def place_lid(x, y, rot, length, holes, z):
     return translate([x, y, z])(rotate([0, 0, rot])(u_shape_lid(length, 45, holes)))
 
 def exo_cutout(x, y, rot, length):
-    return translate([x, y, -10])(rotate([0, 0, rot])(translate([-length / 2 - 10, -100, 0])(cube([length + 20, 100, 300]))))
+    # Делаем вырез значительно выше, чтобы он не мешал установке крышки
+    w_hole = length + 6
+    h_hole = H_balc + 40
+    hole = translate([-w_hole / 2, -offset_skadis - panel_th - 2, base - 3])(
+        cube([w_hole, offset_skadis + panel_th + 4, h_hole])
+    )
+    return translate([x, y, 0])(rotate([0, 0, rot])(hole))
+
+def exo_border(x, y, rot, length):
+    # Исправлено: стартуем строго от 0, чтобы рама не вылезала вниз и не мешала стыковке!
+    w_out = length + 18
+    h_out = H_balc + base + 15
+    w_hole = length + 6
+    h_hole = h_out + 5 # Прорываем верхнюю грань для U-формы
+
+    outer = translate([-w_out / 2, -offset_skadis - panel_th, 0])(
+        cube([w_out, offset_skadis + panel_th, h_out])
+    )
+    inner = translate([-w_hole / 2, -offset_skadis - panel_th - 1, base - 3])(
+        cube([w_hole, offset_skadis + panel_th + 2, h_hole])
+    )
+    border = outer - inner
+    return translate([x, y, 0])(rotate([0, 0, rot])(border))
+
+def layout_exo_features(style, func):
+    styles = {
+        1: [func(160, 0, 0, 180)],
+        2: [func(160, W, 180, 180)],
+        3: [func(100, 0, 0, 120), func(220, W, 180, 120)],
+        4: [func(220, 0, 0, 120), func(100, W, 180, 120)],
+        5: [func(160, 0, 0, 240)],
+        6: [func(160, W, 180, 240)],
+        7: [func(70, 0, 0, 60), func(250, 0, 0, 60), func(70, W, 180, 60), func(250, W, 180, 60)],
+        8: [func(L, W / 2, 90, 180)],
+        9: [func(160, 0, 0, 180), func(160, W, 180, 180), func(L, W / 2, 90, 120)],
+        10: [func(160, 0, 0, 240), func(160, W, 180, 240), func(L, W / 2, 90, 60)]
+    }
+    objs = styles.get(style, [])
+    return union()(*objs) if objs else union()
 
 def layout_outer(style):
-    styles = {
-        1: [place_outer(160, 0, 0, 180)],
-        2: [place_outer(160, W, 180, 180)],
-        3: [place_outer(100, 0, 0, 120), place_outer(220, W, 180, 120)],
-        4: [place_outer(220, 0, 0, 120), place_outer(100, W, 180, 120)],
-        5: [place_outer(160, 0, 0, 240)],
-        6: [place_outer(160, W, 180, 240)],
-        7: [place_outer(70, 0, 0, 60), place_outer(250, 0, 0, 60), place_outer(70, W, 180, 60), place_outer(250, W, 180, 60)],
-        8: [place_outer(L, W / 2, 90, 180)],
-        9: [place_outer(160, 0, 0, 180), place_outer(160, W, 180, 180), place_outer(L, W / 2, 90, 120)],
-        10: [place_outer(160, 0, 0, 240), place_outer(160, W, 180, 240), place_outer(L, W / 2, 90, 60)]
-    }
-    objs = styles.get(style, [])
-    return union()(*objs) if objs else union()
+    return layout_exo_features(style, place_outer)
 
 def layout_inner(style):
-    styles = {
-        1: [place_inner(160, 0, 0, 180)],
-        2: [place_inner(160, W, 180, 180)],
-        3: [place_inner(100, 0, 0, 120), place_inner(220, W, 180, 120)],
-        4: [place_inner(220, 0, 0, 120), place_inner(100, W, 180, 120)],
-        5: [place_inner(160, 0, 0, 240)],
-        6: [place_inner(160, W, 180, 240)],
-        7: [place_inner(70, 0, 0, 60), place_inner(250, 0, 0, 60), place_inner(70, W, 180, 60), place_inner(250, W, 180, 60)],
-        8: [place_inner(L, W / 2, 90, 180)],
-        9: [place_inner(160, 0, 0, 180), place_inner(160, W, 180, 180), place_inner(L, W / 2, 90, 120)],
-        10: [place_inner(160, 0, 0, 240), place_inner(160, W, 180, 240), place_inner(L, W / 2, 90, 60)]
-    }
-    objs = styles.get(style, [])
-    return union()(*objs) if objs else union()
+    return layout_exo_features(style, place_inner)
 
 def layout_lids(style, z):
     styles = {
@@ -63,17 +75,7 @@ def layout_lids(style, z):
     return union()(*objs) if objs else union()
 
 def layout_exo_cutouts(style):
-    styles = {
-        1: [exo_cutout(160, 0, 0, 180)],
-        2: [exo_cutout(160, W, 180, 180)],
-        3: [exo_cutout(100, 0, 0, 120), exo_cutout(220, W, 180, 120)],
-        4: [exo_cutout(220, 0, 0, 120), exo_cutout(100, W, 180, 120)],
-        5: [exo_cutout(160, 0, 0, 240)],
-        6: [exo_cutout(160, W, 180, 240)],
-        7: [exo_cutout(70, 0, 0, 60), exo_cutout(250, 0, 0, 60), exo_cutout(70, W, 180, 60), exo_cutout(250, W, 180, 60)],
-        8: [exo_cutout(L, W / 2, 90, 180)],
-        9: [exo_cutout(160, 0, 0, 180), exo_cutout(160, W, 180, 180), exo_cutout(L, W / 2, 90, 120)],
-        10: [exo_cutout(160, 0, 0, 240), exo_cutout(160, W, 180, 240), exo_cutout(L, W / 2, 90, 60)]
-    }
-    objs = styles.get(style, [])
-    return union()(*objs) if objs else union()
+    return layout_exo_features(style, exo_cutout)
+
+def layout_exo_borders(style):
+    return layout_exo_features(style, exo_border)
